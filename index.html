@@ -34,6 +34,7 @@ nav ul {
   gap: 20px;
   list-style: none;
   margin: 0;
+  padding: 0; /* Clears default spacing */
 }
 nav a {
   color: white;
@@ -51,6 +52,7 @@ nav a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 20px; /* Prevents text hitting screen edges */
 }
 
 .hero-overlay {
@@ -140,16 +142,53 @@ footer {
   color: #3b82f6;
   text-decoration: none;
 }
+
+/* ==========================================================================
+   MOBILE & TABLET RESPONSIVE STYLES (Triggers under 768px wide)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Header breaks to stack neatly */
+  .header-container {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  /* Shrink hero font size so text doesn't overflow or crowd phone screens */
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  /* Metric layout padding tweak for tighter screens */
+  .metrics {
+    gap: 20px;
+  }
+
+  /* Break the 3-column footer layout into a single cleanly stacked column */
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .footer-right {
+    text-align: center;
+  }
+  
+  /* Hides the empty spacer column in the footer on mobile views */
+  .footer-container div:first-child {
+    display: none;
+  }
+}
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <header>
 <div class="header-container">
 <div class="logo">
-<img src="images/smcfiLogo.png">
+<img src="images/smcfiLogo.png" alt="SMCFI Logo">
 </div>
 
 <nav>
@@ -164,7 +203,6 @@ footer {
 </div>
 </header>
 
-<!-- HERO -->
 <section class="hero">
 <div class="hero-overlay"></div>
 
@@ -179,7 +217,6 @@ For over 35 years, SMCFI has been shaping futures through education.
 </div>
 </section>
 
-<!-- STORY -->
 <section class="section">
 <div class="story">
 <h2>Why It Matters</h2>
@@ -191,7 +228,6 @@ rise above challenges and create meaningful change in society.
 </div>
 </section>
 
-<!-- IMPACT -->
 <section class="section">
 <h2 style="text-align:center;">Impact at a Glance</h2>
 
@@ -220,7 +256,6 @@ rise above challenges and create meaningful change in society.
 
 </section>
 
-<!-- CURRENT FOCUS -->
 <section class="section">
 <div class="story">
 <h2>Moving Forward</h2>
@@ -234,13 +269,11 @@ the opportunity to succeed.
 </div>
 </section>
 
-<!-- CTA -->
 <section class="cta">
 <h2>Be Part of the Mission</h2>
 <a href="contact.html" class="btn">Get Involved</a>
 </section>
 
-<!-- FOOTER -->
 <footer>
 <div class="footer-container">
 
