@@ -36,6 +36,7 @@ nav ul {
   gap: 20px;
   list-style: none;
   margin: 0;
+  padding: 0; /* Clears default spacing */
 }
 
 nav a {
@@ -110,23 +111,22 @@ nav a:hover {
   background: #f9fafb;
   padding: 30px;
   border-radius: 12px;
+  min-width: 280px; /* Prevents squishing on desktop layouts */
 }
 
 .info-item {
   margin-bottom: 20px;
 }
 
-.map {
-  height: 180px;
-  background: #e5e7eb;
+/* GOOGLE MAP IFRAME SCALING */
+iframe {
+  width: 100%;       /* Overrides the hardcoded width attribute dynamically */
+  height: 300px;     /* Set a balanced native height */
   border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #6b7280;
-  font-size: 13px;
+  margin-top: 15px;
 }
 
+/* FOOTER */
 footer {
   background: #0f172a;
   padding: 15px 30px;
@@ -157,6 +157,50 @@ footer {
 
 .broadimagi-link:hover {
   text-decoration: underline;
+}
+
+/* ==========================================================================
+   MOBILE & TABLET RESPONSIVE STYLES (Triggers under 768px wide)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Aligns navigation vertically */
+  .header-container {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  /* Compresses container padding for tight mobile layouts */
+  .container {
+    padding: 30px 15px;
+    gap: 20px;
+  }
+
+  /* Makes contact form and details take up full width instead of columns */
+  .form-box, .info-box {
+    flex: 1 1 100%;
+  }
+
+  /* Fixes map frame sizing specifically for phones */
+  iframe {
+    height: 220px;
+  }
+
+  /* Reformats footer layout to single column text block */
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .footer-right {
+    text-align: center;
+  }
+
+  /* Removes spacing spacer grid container element on phones */
+  .footer-container div:first-child {
+    display: none;
+  }
 }
 </style>
 </head>
@@ -238,7 +282,7 @@ Monday – Friday<br>
 9:00 AM – 5:00 PM
 </div>
 
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3862.6810958401775!2d121.06217047488357!3d14.502987685971837!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397cf6c1701af43%3A0x6933158d541c917e!2sSimbayanan%20ni%20Maria%20Foundation%20Community%20Foundation%20Incorporated!5e0!3m2!1sen!2sph!4v1774638107979!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3862.6810958401775!2d121.06217047488357!3d14.502987685971837!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397cf6c1701af43%3A0x6933158d541c917e!2sSimbayanan%20ni%20Maria%20Foundation%20Community%20Foundation%20Incorporated!5e0!3m2!1sen!2sph!4v1774638107979!5m2!1sen!2sph" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
 </div>
 
