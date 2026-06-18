@@ -21,6 +21,8 @@ body {
 header {
   background: #0f172a;
   padding: 15px 30px;
+  position: relative; /* Crucial for positioning the mobile dropdown menu */
+  z-index: 100;
 }
 
 .header-container {
@@ -36,7 +38,7 @@ nav ul {
   gap: 20px;
   list-style: none;
   margin: 0;
-  padding: 0; /* Clears default spacing */
+  padding: 0;
 }
 
 nav a {
@@ -46,6 +48,17 @@ nav a {
 
 nav a:hover {
   color: #3b82f6;
+}
+
+/* HAMBURGER MENU BUTTON (Hidden on Desktop) */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
 }
 
 /* HERO */
@@ -111,7 +124,7 @@ nav a:hover {
   padding: 12px 25px;
   text-decoration: none;
   border-radius: 8px;
-  display: inline-block; /* Keeps padding behaving nicely on buttons */
+  display: inline-block; /* Ensures consistent link button padding */
 }
 
 /* FOOTER */
@@ -141,32 +154,62 @@ footer {
 }
 
 /* ==========================================================================
-   MOBILE & TABLET RESPONSIVE STYLES (Triggers under 768px wide)
+   MOBILE & TABLET RESPONSIVE STYLES (Under 768px wide)
    ========================================================================== */
 @media (max-width: 768px) {
-  /* Stacks navigation elements neatly */
+  /* Forces Logo to the left and Hamburger to the right edge */
   .header-container {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
   }
 
-  /* Shrinks the hero font size slightly on mobile */
+  /* Show the hamburger button explicitly on the right */
+  .menu-toggle {
+    display: block;
+    order: 2; /* Ensures it stays to the right side of the logo */
+  }
+
+  /* Remove nav from inline row space entirely so it doesn't push the layout */
+  nav {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 100%;
+    z-index: 110;
+  }
+
+  /* Transform the navbar menu into an absolute hidden dropdown box */
+  nav ul {
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    background: #0f172a;
+    width: 100%;
+    padding: 20px;
+    gap: 15px;
+    border-top: 1px solid #1e293b;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  /* The JavaScript helper class toggles this display open */
+  nav ul.active {
+    display: flex;
+  }
+
   .hero h1 {
     font-size: 32px;
   }
 
-  /* Adjusts padding on smaller screens */
   .section {
     padding: 40px 15px;
   }
 
-  /* Changes project cards layout to a full-width block stack */
   .card {
     flex: 1 1 100%;
   }
 
-  /* Breaks the 3-column footer into single stacked entries */
   .footer-container {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -177,7 +220,6 @@ footer {
     text-align: center;
   }
 
-  /* Hides the empty layout spacer on mobile viewports */
   .footer-container div:first-child {
     display: none;
   }
@@ -187,15 +229,16 @@ footer {
 
 <body>
 
-<!-- HEADER -->
 <header>
 <div class="header-container">
 <div class="logo">
 <img src="images/smcfiLogo.png" alt="SMCFI Logo">
 </div>
 
+<button class="menu-toggle" id="mobile-menu-btn" aria-label="Toggle Navigation">&#9776;</button>
+
 <nav>
-<ul>
+<ul id="nav-list">
 <li><a href="index.html">Home</a></li>
 <li><a href="scholarships.html">Scholarship</a></li>
 <li><a href="projects.html">Projects</a></li>
@@ -206,13 +249,11 @@ footer {
 </div>
 </header>
 
-<!-- HERO -->
 <section class="hero">
 <h1>SMCFI @ 35</h1>
 <p>Celebrating 35 Years of Transforming Lives Through Education</p>
 </section>
 
-<!-- FEATURED PROJECT -->
 <section class="section">
 
 <div class="featured">
@@ -230,7 +271,6 @@ to support the next generation of scholars.
 
 </section>
 
-<!-- PROJECT LIST -->
 <section class="section">
 <h2>Other Projects</h2>
 
@@ -255,13 +295,11 @@ to support the next generation of scholars.
 
 </section>
 
-<!-- CTA -->
 <section class="cta">
 <h2>Be Part of Our Mission</h2>
 <a href="contact.html" class="btn">Partner With Us</a>
 </section>
 
-<!-- FOOTER -->
 <footer>
 <div class="footer-container">
 
@@ -279,6 +317,15 @@ Powered by Broadimagi
 
 </div>
 </footer>
+
+<script>
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const navList = document.getElementById('nav-list');
+
+  menuBtn.addEventListener('click', () => {
+    navList.classList.toggle('active');
+  });
+</script>
 
 </body>
 </html>
