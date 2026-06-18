@@ -21,6 +21,8 @@ body {
 header {
   background: #0f172a;
   padding: 15px 30px;
+  position: relative; /* Crucial for positioning the mobile dropdown menu */
+  z-index: 100;
 }
 .header-container {
   display: flex;
@@ -34,7 +36,7 @@ nav ul {
   gap: 20px;
   list-style: none;
   margin: 0;
-  padding: 0; /* Clears default spacing */
+  padding: 0;
 }
 nav a {
   color: white;
@@ -42,6 +44,17 @@ nav a {
 }
 nav a:hover {
   color: #3b82f6;
+}
+
+/* HAMBURGER MENU BUTTON (Hidden on Desktop) */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
 }
 
 /* HERO */
@@ -111,27 +124,59 @@ footer {
 }
 
 /* ==========================================================================
-   MOBILE & TABLET RESPONSIVE STYLES (Triggers under 768px wide)
+   MOBILE & TABLET RESPONSIVE STYLES (Under 768px wide)
    ========================================================================== */
 @media (max-width: 768px) {
-  /* Header converts to clean stack */
+  /* Forces Logo to the left and Hamburger to the right edge */
   .header-container {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
   }
 
-  /* Compresses section padding on smaller screen edges */
+  /* Show the hamburger button explicitly on the right */
+  .menu-toggle {
+    display: block;
+    order: 2; /* Ensures it stays to the right side of the logo */
+  }
+
+  /* Remove nav from inline row space entirely so it doesn't push the layout */
+  nav {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 100%;
+    z-index: 110;
+  }
+
+  /* Transform the navbar menu into an absolute hidden dropdown box */
+  nav ul {
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    background: #0f172a;
+    width: 100%;
+    padding: 20px;
+    gap: 15px;
+    border-top: 1px solid #1e293b;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  /* The JavaScript helper class toggles this display open */
+  nav ul.active {
+    display: flex;
+  }
+
   .section {
     padding: 40px 15px;
   }
 
-  /* Drops grid columns down to single full-width blocks */
+  /* Stack layout cards to full width on narrow viewports */
   .card {
     flex: 1 1 100%;
   }
 
-  /* Breaks footer elements down to structured stack lines */
   .footer-container {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -142,7 +187,6 @@ footer {
     text-align: center;
   }
 
-  /* Hides the grid spacer block layout container on mobile views */
   .footer-container div:first-child {
     display: none;
   }
@@ -152,15 +196,16 @@ footer {
 
 <body>
 
-<!-- HEADER -->
 <header>
 <div class="header-container">
 <div class="logo">
 <img src="images/smcfiLogo.png" alt="SMCFI Logo">
 </div>
 
+<button class="menu-toggle" id="mobile-menu-btn" aria-label="Toggle Navigation">☰</button>
+
 <nav>
-<ul>
+<ul id="nav-list">
 <li><a href="index.html">Home</a></li>
 <li><a href="scholarships.html">Scholarship</a></li>
 <li><a href="projects.html">Projects</a></li>
@@ -171,13 +216,11 @@ footer {
 </div>
 </header>
 
-<!-- HERO -->
 <section class="hero">
 <h1>About SMCFI</h1>
 <p>Over three decades of empowering lives through education</p>
 </section>
 
-<!-- OVERVIEW -->
 <section class="section">
 <div class="center-text">
 <h2>Who We Are</h2>
@@ -194,7 +237,6 @@ academically capable students but also socially responsible and values-driven in
 </div>
 </section>
 
-<!-- MISSION & VISION -->
 <section class="section">
 <h2>Our Mission & Vision</h2>
 
@@ -219,7 +261,6 @@ achieve their full potential and create positive impact.
 </div>
 </section>
 
-<!-- HISTORY -->
 <section class="section">
 <div class="center-text">
 <h2>Our Journey</h2>
@@ -236,7 +277,6 @@ corporate sponsors, and community stakeholders to sustain and expand its mission
 </div>
 </section>
 
-<!-- IMPACT -->
 <section class="section">
 <h2>Our Impact</h2>
 
@@ -261,7 +301,6 @@ corporate sponsors, and community stakeholders to sustain and expand its mission
 
 </section>
 
-<!-- VALUES -->
 <section class="section">
 <h2>Our Core Values</h2>
 
@@ -276,7 +315,6 @@ corporate sponsors, and community stakeholders to sustain and expand its mission
 
 </section>
 
-<!-- CTA -->
 <section class="section center-text">
 <h2>Be Part of Our Story</h2>
 <p>
@@ -288,7 +326,6 @@ Get Involved
 </a>
 </section>
 
-<!-- FOOTER -->
 <footer>
 <div class="footer-container">
 
@@ -306,6 +343,15 @@ Powered by Broadimagi
 
 </div>
 </footer>
+
+<script>
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const navList = document.getElementById('nav-list');
+
+  menuBtn.addEventListener('click', () => {
+    navList.classList.toggle('active');
+  });
+</script>
 
 </body>
 </html>
