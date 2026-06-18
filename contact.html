@@ -21,6 +21,8 @@ body {
 header {
   background: #0f172a;
   padding: 15px 30px;
+  position: relative; /* Crucial for positioning the mobile dropdown menu */
+  z-index: 100;
 }
 
 .header-container {
@@ -36,7 +38,7 @@ nav ul {
   gap: 20px;
   list-style: none;
   margin: 0;
-  padding: 0; /* Clears default spacing */
+  padding: 0;
 }
 
 nav a {
@@ -47,6 +49,17 @@ nav a {
 
 nav a:hover {
   color: #3b82f6;
+}
+
+/* HAMBURGER MENU BUTTON (Hidden on Desktop) */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
 }
 
 /* HERO */
@@ -111,17 +124,17 @@ nav a:hover {
   background: #f9fafb;
   padding: 30px;
   border-radius: 12px;
-  min-width: 280px; /* Prevents squishing on desktop layouts */
+  min-width: 280px;
 }
 
 .info-item {
   margin-bottom: 20px;
 }
 
-/* GOOGLE MAP IFRAME SCALING */
+/* GOOGLE MAP IFRAME RESPONSIVE FIX */
 iframe {
-  width: 100%;       /* Overrides the hardcoded width attribute dynamically */
-  height: 300px;     /* Set a balanced native height */
+  width: 100%;
+  height: 300px;
   border-radius: 10px;
   margin-top: 15px;
 }
@@ -160,33 +173,63 @@ footer {
 }
 
 /* ==========================================================================
-   MOBILE & TABLET RESPONSIVE STYLES (Triggers under 768px wide)
-   ========================================================================== */
+   MOBILE & TABLET RESPONSIVE STYLES (Under 768px wide)
+   ========================================================================= */
 @media (max-width: 768px) {
-  /* Aligns navigation vertically */
+  /* Forces Logo to the left and Hamburger to the right edge */
   .header-container {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
   }
 
-  /* Compresses container padding for tight mobile layouts */
+  /* Show the hamburger button explicitly on the right */
+  .menu-toggle {
+    display: block;
+    order: 2; /* Ensures it stays to the right side of the logo */
+  }
+
+  /* Remove nav from inline row space entirely so it doesn't push the layout */
+  nav {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 100%;
+    z-index: 110;
+  }
+
+  /* Transform the navbar menu into an absolute hidden dropdown box */
+  nav ul {
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    background: #0f172a;
+    width: 100%;
+    padding: 20px;
+    gap: 15px;
+    border-top: 1px solid #1e293b;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  /* The JavaScript helper class toggles this display open */
+  nav ul.active {
+    display: flex;
+  }
+
   .container {
     padding: 30px 15px;
     gap: 20px;
   }
 
-  /* Makes contact form and details take up full width instead of columns */
   .form-box, .info-box {
     flex: 1 1 100%;
   }
 
-  /* Fixes map frame sizing specifically for phones */
   iframe {
     height: 220px;
   }
 
-  /* Reformats footer layout to single column text block */
   .footer-container {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -197,7 +240,6 @@ footer {
     text-align: center;
   }
 
-  /* Removes spacing spacer grid container element on phones */
   .footer-container div:first-child {
     display: none;
   }
@@ -207,15 +249,16 @@ footer {
 
 <body>
 
-<!-- HEADER -->
 <header>
 <div class="header-container">
 <div class="logo">
 <img src="images/smcfiLogo.png" alt="SMCFI Logo">
 </div>
 
+<button class="menu-toggle" id="mobile-menu-btn" aria-label="Toggle Navigation">&#9776;</button>
+
 <nav>
-<ul>
+<ul id="nav-list">
 <li><a href="index.html">Home</a></li>
 <li><a href="scholarships.html">Scholarship</a></li>
 <li><a href="projects.html">Projects</a></li>
@@ -226,16 +269,13 @@ footer {
 </div>
 </header>
 
-<!-- HERO -->
 <section class="hero">
 <h1>Contact Us</h1>
 <p>We are here to assist you. Reach out for inquiries, partnerships, and support.</p>
 </section>
 
-<!-- MAIN -->
 <div class="container">
 
-<!-- FORM -->
 <div class="form-box">
 <h2>Send a Message</h2>
 
@@ -257,7 +297,6 @@ footer {
 </form>
 </div>
 
-<!-- INFO -->
 <div class="info-box">
 <h2>Contact Information</h2>
 
@@ -288,19 +327,15 @@ Monday – Friday<br>
 
 </div>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-container">
 
-    <!-- EMPTY LEFT (for balance) -->
     <div></div>
 
-    <!-- CENTER -->
     <div class="footer-center">
       © 2026 SMCFI  All rights reserved.
     </div>
 
-    <!-- RIGHT -->
     <div class="footer-right">
       <a href="https://broadimagi.com" target="_blank" class="broadimagi-link">
         Powered by Broadimagi
@@ -309,6 +344,15 @@ Monday – Friday<br>
 
   </div>
 </footer>
+
+<script>
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const navList = document.getElementById('nav-list');
+
+  menuBtn.addEventListener('click', () => {
+    navList.classList.toggle('active');
+  });
+</script>
 
 </body>
 </html>
