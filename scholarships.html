@@ -21,6 +21,8 @@ body {
 header {
   background: #0f172a;
   padding: 15px 30px;
+  position: relative; /* Crucial for positioning the mobile dropdown menu */
+  z-index: 100;
 }
 .header-container {
   display: flex;
@@ -34,7 +36,7 @@ nav ul {
   gap: 20px;
   list-style: none;
   margin: 0;
-  padding: 0; /* Clears default spacing */
+  padding: 0;
 }
 nav a {
   color: white;
@@ -42,6 +44,17 @@ nav a {
 }
 nav a:hover {
   color: #3b82f6;
+}
+
+/* HAMBURGER MENU BUTTON (Hidden on Desktop) */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
 }
 
 /* HERO */
@@ -108,7 +121,7 @@ nav a:hover {
   background: #e0e7ff;
   padding: 20px;
   border-radius: 10px;
-  text-align: center; /* Centers step text nicely */
+  text-align: center;
 }
 
 /* CTA */
@@ -122,7 +135,7 @@ nav a:hover {
   padding: 12px 25px;
   border-radius: 8px;
   text-decoration: none;
-  display: inline-block; /* Prevents button link clipping issues */
+  display: inline-block;
 }
 
 /* FOOTER */
@@ -148,32 +161,63 @@ footer {
 }
 
 /* ==========================================================================
-   MOBILE & TABLET RESPONSIVE STYLES (Triggers under 768px wide)
+   MOBILE & TABLET RESPONSIVE STYLES (Under 768px wide)
    ========================================================================== */
 @media (max-width: 768px) {
-  /* Header elements stack neatly */
+  /* Forces Logo to the left and Hamburger to the right edge */
   .header-container {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
   }
 
-  /* Shrinks hero heading for mobile screens */
+  /* Show the hamburger button explicitly on the right */
+  .menu-toggle {
+    display: block;
+    order: 2; /* Ensures it stays to the right side of the logo */
+  }
+
+  /* Remove nav from inline row space entirely so it doesn't push the layout */
+  nav {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 100%;
+    z-index: 110;
+  }
+
+  /* Transform the navbar menu into an absolute hidden dropdown box */
+  nav ul {
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    background: #0f172a;
+    width: 100%;
+    padding: 20px;
+    gap: 15px;
+    border-top: 1px solid #1e293b;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  /* The JavaScript helper class toggles this display open */
+  nav ul.active {
+    display: flex;
+  }
+  
   .hero h1 {
     font-size: 32px;
   }
 
-  /* Compresses section padding on smaller screens */
   .section {
     padding: 40px 15px;
   }
 
-  /* Tighter layouts force full-width stacked columns */
+  /* Stack columns into standard full-width blocks on smaller displays */
   .card, .step {
     flex: 1 1 100%;
   }
 
-  /* Converts grid footer layout into a readable stacked column */
   .footer-container {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -183,8 +227,7 @@ footer {
   .footer-right {
     text-align: center;
   }
-
-  /* Hides structural spacer grid box on phone screens */
+  
   .footer-container div:first-child {
     display: none;
   }
@@ -194,15 +237,16 @@ footer {
 
 <body>
 
-<!-- HEADER -->
 <header>
 <div class="header-container">
 <div class="logo">
 <img src="images/smcfiLogo.png" alt="SMCFI Logo">
 </div>
 
+<button class="menu-toggle" id="mobile-menu-btn" aria-label="Toggle Navigation">&#9776;</button>
+
 <nav>
-<ul>
+<ul id="nav-list">
 <li><a href="index.html">Home</a></li>
 <li><a href="scholarships.html">Scholarship</a></li>
 <li><a href="projects.html">Projects</a></li>
@@ -213,13 +257,11 @@ footer {
 </div>
 </header>
 
-<!-- HERO -->
 <section class="hero">
 <h1>Our Programs</h1>
 <p>Developing scholars through education, leadership, and service</p>
 </section>
 
-<!-- CORE PROGRAMS -->
 <section class="section">
 <h2>Core Programs</h2>
 
@@ -248,7 +290,6 @@ footer {
 </div>
 </section>
 
-<!-- SCHOLARSHIP DETAIL -->
 <section class="section">
 
 <div class="highlight">
@@ -268,7 +309,6 @@ allowances, mentorship, and leadership formation.
 
 </section>
 
-<!-- HOW IT WORKS -->
 <section class="section">
 <h2>How It Works</h2>
 
@@ -281,7 +321,6 @@ allowances, mentorship, and leadership formation.
 
 </section>
 
-<!-- IMPACT -->
 <section class="section">
 <h2>Program Impact</h2>
 
@@ -293,13 +332,11 @@ allowances, mentorship, and leadership formation.
 
 </section>
 
-<!-- CTA -->
 <section class="cta">
 <h2>Join Our Programs</h2>
 <a href="contact.html" class="btn">Apply or Partner</a>
 </section>
 
-<!-- FOOTER -->
 <footer>
 <div class="footer-container">
 
@@ -317,6 +354,15 @@ Powered by Broadimagi
 
 </div>
 </footer>
+
+<script>
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const navList = document.getElementById('nav-list');
+
+  menuBtn.addEventListener('click', () => {
+    navList.classList.toggle('active');
+  });
+</script>
 
 </body>
 </html>
