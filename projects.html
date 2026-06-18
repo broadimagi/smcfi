@@ -36,6 +36,7 @@ nav ul {
   gap: 20px;
   list-style: none;
   margin: 0;
+  padding: 0; /* Clears default spacing */
 }
 
 nav a {
@@ -110,6 +111,7 @@ nav a:hover {
   padding: 12px 25px;
   text-decoration: none;
   border-radius: 8px;
+  display: inline-block; /* Keeps padding behaving nicely on buttons */
 }
 
 /* FOOTER */
@@ -137,6 +139,49 @@ footer {
   color: #3b82f6;
   text-decoration: none;
 }
+
+/* ==========================================================================
+   MOBILE & TABLET RESPONSIVE STYLES (Triggers under 768px wide)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Stacks navigation elements neatly */
+  .header-container {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  /* Shrinks the hero font size slightly on mobile */
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  /* Adjusts padding on smaller screens */
+  .section {
+    padding: 40px 15px;
+  }
+
+  /* Changes project cards layout to a full-width block stack */
+  .card {
+    flex: 1 1 100%;
+  }
+
+  /* Breaks the 3-column footer into single stacked entries */
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .footer-right {
+    text-align: center;
+  }
+
+  /* Hides the empty layout spacer on mobile viewports */
+  .footer-container div:first-child {
+    display: none;
+  }
+}
 </style>
 </head>
 
@@ -146,7 +191,7 @@ footer {
 <header>
 <div class="header-container">
 <div class="logo">
-<img src="images/smcfiLogo.png">
+<img src="images/smcfiLogo.png" alt="SMCFI Logo">
 </div>
 
 <nav>
