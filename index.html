@@ -60,18 +60,19 @@ nav a:hover {
 /* HERO WITH IMAGE */
 .hero {
   position: relative;
-  background: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644') center/cover no-repeat;
+  background: #0f172a;
   height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 20px;
+  overflow: hidden;
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(15,23,42,0.75);
+  background: linear-gradient(90deg, rgba(15,23,42,0.82), rgba(15,23,42,0.58), rgba(15,23,42,0.34));
 }
 
 .hero-content {
@@ -224,6 +225,7 @@ footer {
   }
 }
 </style>
+<link href="css/site.css" rel="stylesheet">
 </head>
 
 <body>
@@ -289,7 +291,7 @@ rise above challenges and create meaningful change in society.
 
 <div class="metric">
 <h2>100+</h2>
-<p>Scholars Annualy</p>
+<p>Scholars Annually</p>
 </div>
 
 <div class="metric">
@@ -325,7 +327,7 @@ the opportunity to succeed.
 <div></div>
 
 <div class="footer-center">
-© 2026 SMCFI  All rights reserved.
+&copy; 2026 SMCFI. All rights reserved.
 </div>
 
 <div class="footer-right">
@@ -337,14 +339,7 @@ Powered by Broadimagi
 </div>
 </footer>
 
-<script>
-  const menuBtn = document.getElementById('mobile-menu-btn');
-  const navList = document.getElementById('nav-list');
-
-  menuBtn.addEventListener('click', () => {
-    navList.classList.toggle('active');
-  });
-</script>
+<script src="js/site.js"></script>
 
 </body>
 </html>
