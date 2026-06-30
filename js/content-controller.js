@@ -4,6 +4,36 @@
 
   const getValue = (row, key) => row[key] || row[key.replace(/\s+/g, "")] || "";
   const isActive = (row) => String(getValue(row, "status")).toLowerCase() === "active";
+  const cleanLink = (value = "") => {
+    const text = String(value).trim();
+    const imageFunction = text.match(/=?\s*IMAGE\(\s*["']([^"']+)["']\s*\)/i);
+    if (imageFunction) return imageFunction[1].trim();
+    const markdownLink = text.match(/\[[^\]]+\]\(([^)]+)\)/);
+    if (markdownLink) return markdownLink[1].trim();
+    const url = text.match(/https?:\/\/[^\s)]+|#\/[^\s)]+/);
+    return url ? url[0] : text;
+  };
+  const cleanImageUrl = (value = "") => {
+    const cleaned = cleanLink(value).replace(/^['"]|['"]$/g, "");
+    if (!cleaned) return "";
+
+    const patterns = [
+      /=?\s*IMAGE\(\s*["']([^"']+)["']\s*\)/i,
+      /drive\.google\.com\/file\/d\/([^/]+)/i,
+      /drive\.google\.com\/uc\?[^#]*\bid=([^&]+)/i,
+      /drive\.google\.com\/thumbnail\?[^#]*\bid=([^&]+)/i,
+      /drive\.google\.com\/open\?[^#]*\bid=([^&]+)/i,
+      /drive\.google\.com\/.*[?&]id=([^&]+)/i,
+      /docs\.google\.com\/uc\?export=view&id=([^&]+)/i,
+    ];
+
+    for (const pattern of patterns) {
+      const match = cleaned.match(pattern);
+      if (match?.[1]) return `https://drive.google.com/thumbnail?id=${encodeURIComponent(match[1])}&sz=w1600`;
+    }
+
+    return cleaned;
+  };
   const escapeHtml = (value) => String(value || "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -62,7 +92,7 @@
     return String(markdown || "")
       .split(/\n{2,}/)
       .map((block) => {
-        const withImages = escapeHtml(block).replace(imagePattern, '<img src="$2" alt="$1" class="content-image">');
+        const withImages = escapeHtml(block).replace(imagePattern, (_, alt, src) => `<img src="${escapeHtml(cleanImageUrl(src))}" alt="${escapeHtml(alt)}" class="content-image">`);
         return withImages.startsWith("<img") ? withImages : `<p>${withImages.replace(/\n/g, "<br>")}</p>`;
       })
       .join("");
@@ -74,7 +104,7 @@
     if (!row) return;
 
     const imageSettings = getValue(row, "ImageSettings");
-    const imageUrl = getValue(row, "ImageURL");
+    const imageUrl = cleanImageUrl(getValue(row, "ImageURL"));
     const buttonText = getValue(row, "ButtonText");
     const buttonLink = getValue(row, "ButtonLink");
     const modal = document.createElement("div");
@@ -108,7 +138,7 @@
   const renderCards = (rows, type) => rows.map((row) => {
     const id = rowId(row);
     const href = `${type}.html?id=${encodeURIComponent(id)}`;
-    const thumbnail = getValue(row, "CardThumbnail") || getValue(row, "ImageURL");
+    const thumbnail = cleanImageUrl(getValue(row, "CardThumbnail") || getValue(row, "ImageURL"));
     return `
       <article class="content-card">
         ${thumbnail ? `<img src="${escapeHtml(thumbnail)}" alt="" class="content-card-image">` : ""}
@@ -164,7 +194,7 @@
     if (type === "news") {
       root.innerHTML = `
         <div class="content-carousel">
-          ${rows.slice(0, 5).map((row) => `<div class="content-carousel-slide" style="background-image:url('${escapeHtml(getValue(row, "CardThumbnail"))}')">${escapeHtml(getValue(row, "Subheader"))}</div>`).join("")}
+          ${rows.slice(0, 5).map((row) => `<div class="content-carousel-slide" style="background-image:url('${escapeHtml(cleanImageUrl(getValue(row, "CardThumbnail")))}')">${escapeHtml(getValue(row, "Subheader"))}</div>`).join("")}
         </div>
         <div class="content-grid">${renderCards(rows, type)}</div>
       `;

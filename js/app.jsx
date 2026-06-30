@@ -124,7 +124,7 @@ function cleanImageUrl(value = "") {
   for (const pattern of patterns) {
     const match = cleaned.match(pattern);
     if (match?.[1]) {
-      return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+      return `https://drive.google.com/thumbnail?id=${encodeURIComponent(match[1])}&sz=w1600`;
     }
   }
 
@@ -377,6 +377,8 @@ function Scholarship() {
 function ContentHub({ type, rows, id }) {
   const backupRows = type === "projects" ? fallbackProjects : fallbackNews;
   const selected = id ? rows.find((row) => field(row, "ID") === id) || backupRows.find((row) => field(row, "ID") === id) : null;
+  const featured = type === "news" ? rows[0] : null;
+  const gridRows = featured ? rows.slice(1) : rows;
   if (id) {
     return selected ? <Detail type={type} row={selected} /> : <Empty message={`${type} item not found.`} />;
   }
@@ -384,20 +386,37 @@ function ContentHub({ type, rows, id }) {
   return (
     <section className="section">
       <div className="section-inner">
-        {type === "news" && (
-          <div className="content-carousel">
-            {rows.slice(0, 5).map((row) => (
-              <div className="content-slide" key={field(row, "ID")} style={{ backgroundImage: `url(${cleanImageUrl(field(row, "Card Thumbnail", "CardThumbnail"))})` }}>
-                <span>{field(row, "Subheader")}</span>
-              </div>
-            ))}
-          </div>
-        )}
+        {featured && <FeaturedNews row={featured} />}
         <div className="content-grid">
-          {rows.map((row) => <ContentCard key={field(row, "ID")} type={type} row={row} />)}
+          {gridRows.map((row) => <ContentCard key={field(row, "ID")} type={type} row={row} />)}
         </div>
       </div>
     </section>
+  );
+}
+
+function ContentImage({ src, className = "" }) {
+  if (!src) return null;
+  return (
+    <div className={`content-image-frame ${className}`} style={{ "--image-url": `url(${src})` }}>
+      <img src={src} alt="" />
+    </div>
+  );
+}
+
+function FeaturedNews({ row }) {
+  const id = field(row, "ID");
+  const thumbnail = cleanImageUrl(field(row, "Card Thumbnail", "CardThumbnail", "ImageURL"));
+  return (
+    <article className="featured-news">
+      <ContentImage src={thumbnail} className="featured-news-image" />
+      <div className="featured-news-body">
+        <p className="detail-meta">{field(row, "Date")}</p>
+        <h2>{field(row, "Header")}</h2>
+        <p>{field(row, "Subheader") || field(row, "Body").replace(/<br\s*\/?>/gi, " ").slice(0, 180)}</p>
+        <a className="btn" href={`#/news/${id}`}>Read More</a>
+      </div>
+    </article>
   );
 }
 
@@ -406,7 +425,7 @@ function ContentCard({ type, row }) {
   const thumbnail = cleanImageUrl(field(row, "Card Thumbnail", "CardThumbnail", "ImageURL"));
   return (
     <article className="content-card">
-      {thumbnail && <img src={thumbnail} alt="" />}
+      <ContentImage src={thumbnail} />
       <div className="content-card-body">
         <h3>{field(row, "Header")}</h3>
         <p>{field(row, "Subheader")}</p>
@@ -530,7 +549,11 @@ function OpeningModal({ rows }) {
     <div className="opening-modal">
       <div className={`opening-card ${setting === "Background" ? "background" : ""} ${setting === "Image Only" ? "image-only" : ""}`} style={setting === "Background" ? { backgroundImage: `url(${imageUrl})` } : {}}>
         <button className="opening-close" type="button" onClick={() => setVisible(false)}>×</button>
-        {imageUrl && setting !== "Background" && <img src={imageUrl} alt="" />}
+        {imageUrl && setting !== "Background" && (
+          <div className="opening-media" style={{ "--image-url": `url(${imageUrl})` }}>
+            <img src={imageUrl} alt="" />
+          </div>
+        )}
         {setting !== "Image Only" && (
           <div className="opening-body">
             <h2>{field(row, "Header")}</h2>
