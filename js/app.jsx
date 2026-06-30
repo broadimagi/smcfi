@@ -477,7 +477,7 @@ function Contact() {
           </form>
           <div className="panel card">
             <h2>Contact Information</h2>
-            <p><strong>Email</strong><br />info@smcfi.org</p>
+            <p><strong>Email</strong><br />simbaayananfoundation@gmail.com</p>
             <p><strong>Phone</strong><br />+63 900 000 0000</p>
             <p><strong>Location</strong><br />Taguig City, Philippines</p>
             <p><strong>Office Hours</strong><br />Monday - Friday<br />9:00 AM - 5:00 PM</p>
