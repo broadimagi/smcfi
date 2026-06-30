@@ -104,6 +104,28 @@ function cleanLink(value = "") {
   return url ? url[0] : text;
 }
 
+function cleanImageUrl(value = "") {
+  const text = String(value).trim();
+  if (!text) return "";
+
+  const cleaned = cleanLink(text);
+  const patterns = [
+    /drive\.google\.com\/file\/d\/([^/]+)/i,
+    /drive\.google\.com\/uc\?[^#]*\bid=([^&]+)/i,
+    /drive\.google\.com\/thumbnail\?[^#]*\bid=([^&]+)/i,
+    /drive\.google\.com\/open\?[^#]*\bid=([^&]+)/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = cleaned.match(pattern);
+    if (match?.[1]) {
+      return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+    }
+  }
+
+  return cleaned;
+}
+
 function parseCsv(text) {
   const rows = [];
   let row = [];
@@ -221,7 +243,7 @@ function markdown(text = "") {
     } else if (imageMatch) {
       flushParagraph();
       flushList();
-      output.push(<img key={`img-${output.length}`} src={cleanLink(imageMatch[2])} alt={imageMatch[1]} />);
+      output.push(<img key={`img-${output.length}`} src={cleanImageUrl(imageMatch[2])} alt={imageMatch[1]} />);
     } else if (line.startsWith("### ")) {
       flushParagraph();
       flushList();
@@ -357,7 +379,7 @@ function ContentHub({ type, rows, id }) {
         {type === "news" && (
           <div className="content-carousel">
             {rows.slice(0, 5).map((row) => (
-              <div className="content-slide" key={field(row, "ID")} style={{ backgroundImage: `url(${cleanLink(field(row, "Card Thumbnail", "CardThumbnail"))})` }}>
+              <div className="content-slide" key={field(row, "ID")} style={{ backgroundImage: `url(${cleanImageUrl(field(row, "Card Thumbnail", "CardThumbnail"))})` }}>
                 <span>{field(row, "Subheader")}</span>
               </div>
             ))}
@@ -373,7 +395,7 @@ function ContentHub({ type, rows, id }) {
 
 function ContentCard({ type, row }) {
   const id = field(row, "ID");
-  const thumbnail = cleanLink(field(row, "Card Thumbnail", "CardThumbnail", "ImageURL"));
+  const thumbnail = cleanImageUrl(field(row, "Card Thumbnail", "CardThumbnail", "ImageURL"));
   return (
     <article className="content-card">
       {thumbnail && <img src={thumbnail} alt="" />}
@@ -493,7 +515,7 @@ function OpeningModal({ rows }) {
   const row = rows[0];
   if (!visible || !row) return null;
   const setting = field(row, "Image Settings", "ImageSettings") || "Top";
-  const imageUrl = cleanLink(field(row, "Image URL", "ImageURL"));
+  const imageUrl = cleanImageUrl(field(row, "Image URL", "ImageURL"));
   const buttonText = field(row, "Button Text", "ButtonText");
   const buttonLink = cleanLink(field(row, "Button Link", "ButtonLink"));
   return (
