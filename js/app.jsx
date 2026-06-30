@@ -98,9 +98,11 @@ function field(row, ...keys) {
 
 function cleanLink(value = "") {
   const text = String(value).trim();
+  const imageFunction = text.match(/=?\s*IMAGE\(\s*["']([^"']+)["']\s*\)/i);
+  if (imageFunction) return imageFunction[1].trim();
   const markdownLink = text.match(/\[[^\]]+\]\(([^)]+)\)/);
   if (markdownLink) return markdownLink[1].trim();
-  const url = text.match(/https?:\/\/[^\s)]+|#\/[^\s)]+/);
+  const url = text.match(/https?:\/\/[^\s)]+|#\/[^^\s)]+/);
   return url ? url[0] : text;
 }
 
@@ -108,12 +110,15 @@ function cleanImageUrl(value = "") {
   const text = String(value).trim();
   if (!text) return "";
 
-  const cleaned = cleanLink(text);
+  const cleaned = cleanLink(text).replace(/^['"]|['"]$/g, "");
   const patterns = [
+    /=?\s*IMAGE\(\s*["']([^"']+)["']\s*\)/i,
     /drive\.google\.com\/file\/d\/([^/]+)/i,
     /drive\.google\.com\/uc\?[^#]*\bid=([^&]+)/i,
     /drive\.google\.com\/thumbnail\?[^#]*\bid=([^&]+)/i,
     /drive\.google\.com\/open\?[^#]*\bid=([^&]+)/i,
+    /drive\.google\.com\/.*[?&]id=([^&]+)/i,
+    /docs\.google\.com\/uc\?export=view&id=([^&]+)/i,
   ];
 
   for (const pattern of patterns) {
@@ -282,7 +287,10 @@ function Header({ route, setRoute }) {
   return (
     <header className="site-header">
       <div className="header-inner">
-        <a className="brand" href="#/" onClick={() => setOpen(false)}>Simbayanan ni Maria Community Foundation, Inc.</a>
+        <a className="brand" href="#/" onClick={() => setOpen(false)}>
+          <img className="brand-logo" src="images/smcfiLogo.png" alt="SMCFI logo" />
+          <span>Simbayanan ni Maria Community Foundation, Inc.</span>
+        </a>
         <button className="nav-toggle" type="button" onClick={() => setOpen(!open)} aria-label="Toggle navigation">☰</button>
         <nav className={`main-nav ${open ? "open" : ""}`}>
           {nav.map(([page, label]) => (
@@ -499,7 +507,7 @@ function Contact() {
           </form>
           <div className="panel card">
             <h2>Contact Information</h2>
-            <p><strong>Email</strong><br />simbaayananfoundation@gmail.com</p>
+            <p><strong>Email</strong><br />simbayananfoundation@gmail.com</p>
             <p><strong>Phone</strong><br />+63 900 000 0000</p>
             <p><strong>Location</strong><br />Taguig City, Philippines</p>
             <p><strong>Office Hours</strong><br />Monday - Friday<br />9:00 AM - 5:00 PM</p>

@@ -63,11 +63,26 @@ textarea {
 }
 
 .brand {
+  align-items: center;
   color: var(--white);
+  display: inline-flex;
+  gap: 12px;
   font-weight: 600;
   line-height: 1.2;
   max-width: 430px;
   text-decoration: none;
+}
+
+.brand-logo {
+  display: block;
+  height: 44px;
+  width: 44px;
+  object-fit: contain;
+}
+
+.brand span {
+  display: inline-block;
+  max-width: 320px;
 }
 
 .nav-toggle {
