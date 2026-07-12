@@ -48,6 +48,26 @@ Because this is a static site, React uses hash routes:
 - `index.html#/contact`
 - `index.html#/about`
 
+## Social Share Previews
+
+Facebook, Messenger, X, and other apps read static HTML metadata before the
+React app or Google Sheet content loads. For per-news thumbnails, generate the
+static share pages after updating the `news` sheet:
+
+```sh
+node tools/generate-news-share-pages.mjs
+```
+
+This creates pages such as:
+
+- `news/101/index.html`
+- `news/102/index.html`
+
+Share links in the app use these URLs, for example
+`https://simbayananfoundation.org/news/102/`. Each generated page contains the
+news title, description, and image preview, then redirects visitors to
+`index.html#/news/102`.
+
 ## Required Columns
 
 Column names can use spaces or compact names. For example, `Card Thumbnail`

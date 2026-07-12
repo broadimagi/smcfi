@@ -492,7 +492,7 @@ function ContentCard({ type, row }) {
 
 function shareUrlFor(type, id) {
   const origin = window.location.origin;
-  if (type === "news") return `${origin}/news.html?id=${encodeURIComponent(id)}`;
+  if (type === "news") return `${origin}/news/${encodeURIComponent(id)}/`;
   if (type === "projects") return `${origin}/projects.html?id=${encodeURIComponent(id)}`;
   return window.location.href;
 }
