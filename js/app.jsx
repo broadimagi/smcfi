@@ -505,6 +505,23 @@ function ShareNews({ row }) {
   const encodedUrl = encodeURIComponent(shareUrl);
   const encodedTitle = encodeURIComponent(title);
 
+  const shareNative = async () => {
+    if (!navigator.share) {
+      await copyLink();
+      return;
+    }
+
+    try {
+      await navigator.share({
+        title,
+        text: title,
+        url: shareUrl,
+      });
+    } catch (error) {
+      if (error.name !== "AbortError") await copyLink();
+    }
+  };
+
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(shareUrl);
@@ -518,8 +535,9 @@ function ShareNews({ row }) {
   return (
     <div className="share-row" aria-label="Share this news">
       <span>Share</span>
-      <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`} target="_blank" rel="noopener noreferrer">Facebook</a>
-      <a href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`} target="_blank" rel="noopener noreferrer">X</a>
+      <button className="share-native" type="button" onClick={shareNative}>Share...</button>
+      <a className="share-network" href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`} target="_blank" rel="noopener noreferrer">Facebook</a>
+      <a className="share-network" href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`} target="_blank" rel="noopener noreferrer">X</a>
       <button type="button" onClick={copyLink}>{copied ? "Copied" : "Copy Link"}</button>
     </div>
   );

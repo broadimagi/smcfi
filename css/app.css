@@ -381,6 +381,17 @@ textarea {
   border-color: #bfdbfe;
 }
 
+.share-row .share-native {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--white);
+}
+
+.share-row .share-native:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
 .detail-body img {
   border-radius: 8px;
   display: block;
@@ -730,6 +741,22 @@ textarea {
   .btn-row,
   .footer-inner {
     display: grid;
+  }
+
+  .share-row {
+    align-items: stretch;
+  }
+
+  .share-row span {
+    flex-basis: 100%;
+  }
+
+  .share-row .share-native {
+    flex: 1 1 160px;
+  }
+
+  .share-row .share-network {
+    display: none;
   }
 
   .featured-news {
