@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="refresh" content="0; url=index.html#/projects">
 <title>Projects | Simbayanan ni Maria Community Foundation, Inc.</title>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+  window.location.replace(`index.html#/projects${id ? `/${encodeURIComponent(id)}` : ""}`);
+</script>
 </head>
 <body>
 <p><a href="index.html#/projects">Open Projects page</a></p>

@@ -131,6 +131,15 @@ function cleanImageUrl(value = "") {
   return cleaned;
 }
 
+function driveImageFallbackUrl(value = "") {
+  const cleaned = cleanLink(value).replace(/^['"]|['"]$/g, "");
+  const match = cleaned.match(/drive\.google\.com\/file\/d\/([^/]+)/i)
+    || cleaned.match(/drive\.google\.com\/(?:uc|thumbnail|open)\?[^#]*\bid=([^&]+)/i)
+    || cleaned.match(/drive\.google\.com\/.*[?&]id=([^&]+)/i)
+    || cleaned.match(/docs\.google\.com\/uc\?export=view&id=([^&]+)/i);
+  return match?.[1] ? `https://lh3.googleusercontent.com/d/${encodeURIComponent(match[1])}=w1600` : "";
+}
+
 function parseCsv(text) {
   const rows = [];
   let row = [];
@@ -187,6 +196,19 @@ async function loadSheet(key, fallback) {
 
 function routeFromHash() {
   const hash = window.location.hash.replace(/^#\/?/, "");
+  if (!hash) {
+    const params = new URLSearchParams(window.location.search);
+    const route = (params.get("route") || "").replace(/^\/?/, "");
+    if (route) {
+      const [routePage = "", routeId = ""] = route.split("/");
+      return { page: routePage || "home", id: routeId };
+    }
+
+    const filename = window.location.pathname.split("/").pop();
+    const id = params.get("id") || "";
+    if (filename === "news.html") return { page: "news", id };
+    if (filename === "projects.html") return { page: "projects", id };
+  }
   const [page = "", id = ""] = hash.split("/");
   return { page: page || "home", id };
 }
@@ -216,6 +238,19 @@ function markdown(text = "") {
   const output = [];
   let paragraph = [];
   let list = [];
+  let images = [];
+
+  const renderBodyImage = (image, key) => (
+    <img
+      key={key}
+      src={cleanImageUrl(image.src)}
+      alt={image.alt}
+      onError={(event) => {
+        const fallback = driveImageFallbackUrl(image.src);
+        if (fallback && event.currentTarget.src !== fallback) event.currentTarget.src = fallback;
+      }}
+    />
+  );
 
   const flushParagraph = () => {
     if (!paragraph.length) return;
@@ -234,6 +269,20 @@ function markdown(text = "") {
     list = [];
   };
 
+  const flushImages = () => {
+    if (!images.length) return;
+    if (images.length === 1) {
+      output.push(renderBodyImage(images[0], `img-${output.length}`));
+    } else {
+      output.push(
+        <div className="detail-image-gallery" key={`gallery-${output.length}`}>
+          {images.map((image, index) => renderBodyImage(image, `gallery-img-${output.length}-${index}`))}
+        </div>
+      );
+    }
+    images = [];
+  };
+
   lines.forEach((rawLine) => {
     const line = rawLine.trim();
     const imageMatch = line.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
@@ -241,29 +290,35 @@ function markdown(text = "") {
     if (!line) {
       flushParagraph();
       flushList();
+      flushImages();
     } else if (line === "---") {
       flushParagraph();
       flushList();
+      flushImages();
       output.push(<hr key={`hr-${output.length}`} />);
     } else if (imageMatch) {
       flushParagraph();
       flushList();
-      output.push(<img key={`img-${output.length}`} src={cleanImageUrl(imageMatch[2])} alt={imageMatch[1]} />);
+      images.push({ alt: imageMatch[1], src: imageMatch[2] });
     } else if (line.startsWith("### ")) {
       flushParagraph();
       flushList();
+      flushImages();
       output.push(<h3 key={`h3-${output.length}`}>{inlineFormat(line.slice(4), `h3-${output.length}`)}</h3>);
     } else if (line.startsWith("* ")) {
       flushParagraph();
+      flushImages();
       list.push(line.slice(2).trim());
     } else {
       flushList();
+      flushImages();
       paragraph.push(line);
     }
   });
 
   flushParagraph();
   flushList();
+  flushImages();
   return output;
 }
 
@@ -435,6 +490,41 @@ function ContentCard({ type, row }) {
   );
 }
 
+function shareUrlFor(type, id) {
+  const origin = window.location.origin;
+  if (type === "news") return `${origin}/news.html?id=${encodeURIComponent(id)}`;
+  if (type === "projects") return `${origin}/projects.html?id=${encodeURIComponent(id)}`;
+  return window.location.href;
+}
+
+function ShareNews({ row }) {
+  const [copied, setCopied] = useState(false);
+  const id = field(row, "ID");
+  const title = field(row, "Header");
+  const shareUrl = shareUrlFor("news", id);
+  const encodedUrl = encodeURIComponent(shareUrl);
+  const encodedTitle = encodeURIComponent(title);
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch (error) {
+      window.prompt("Copy this link", shareUrl);
+    }
+  };
+
+  return (
+    <div className="share-row" aria-label="Share this news">
+      <span>Share</span>
+      <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`} target="_blank" rel="noopener noreferrer">Facebook</a>
+      <a href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`} target="_blank" rel="noopener noreferrer">X</a>
+      <button type="button" onClick={copyLink}>{copied ? "Copied" : "Copy Link"}</button>
+    </div>
+  );
+}
+
 function Detail({ type, row }) {
   const button1Text = field(row, "Button 1 Text", "Button1Text");
   const button1Link = cleanLink(field(row, "Button 1 Link", "Button1Link"));
@@ -446,6 +536,7 @@ function Detail({ type, row }) {
         <a href={`#/${type}`} className="muted">Back to {type}</a>
         <h2>{field(row, "Header")}</h2>
         {type === "news" && <p className="detail-meta">By {field(row, "Published By", "PublishedBy") || "SMCFI"} on {field(row, "Date")}</p>}
+        {type === "news" && <ShareNews row={row} />}
         <div className="detail-body">{markdown(field(row, "Body"))}</div>
         {(button1Text || button2Text) && (
           <div className="btn-row">

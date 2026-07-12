@@ -94,5 +94,20 @@ The `Body` cell can be treated like a small text editor field. It supports:
 - `* bullet item`
 - `<br>` or `<br><br>` for line breaks from spreadsheet text
 
+Images on consecutive lines render as an inline gallery:
+
+```md
+![Photo 1](https://drive.google.com/file/d/FILE_ID_1/view?usp=drive_link)
+![Photo 2](https://drive.google.com/file/d/FILE_ID_2/view?usp=drive_link)
+```
+
+Images separated by a blank line render stacked:
+
+```md
+![Photo 1](https://drive.google.com/file/d/FILE_ID_1/view?usp=drive_link)
+
+![Photo 2](https://drive.google.com/file/d/FILE_ID_2/view?usp=drive_link)
+```
+
 Button links can be pasted as either a plain URL or spreadsheet-friendly
 Markdown, such as `[https://smcfi.org/alumni-signup](https://smcfi.org/alumni-signup)`.
