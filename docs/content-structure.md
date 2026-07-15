@@ -51,22 +51,32 @@ Because this is a static site, React uses hash routes:
 ## Social Share Previews
 
 Facebook, Messenger, X, and other apps read static HTML metadata before the
-React app or Google Sheet content loads. For per-news thumbnails, generate the
-static share pages after updating the `news` sheet:
+React app or Google Sheet content loads. Per-news thumbnails use generated
+static share pages.
+
+GitHub Actions runs `.github/workflows/update-news-share-pages.yml` every 30
+minutes and can also be run manually from the Actions tab. It reads the `news`
+sheet and commits generated pages such as:
+
+- `news/101/index.html`
+- `news/102/index.html`
+- `news/103/index.html`
+
+Share links in the app use URLs such as
+`https://simbayananfoundation.org/news/102/`. Each generated page contains the
+news title, description, and image preview, then redirects visitors to
+`index.html#/news/102`.
+
+If you want to generate the pages locally after updating the `news` sheet, run:
 
 ```sh
 node tools/generate-news-share-pages.mjs
 ```
 
-This creates pages such as:
-
-- `news/101/index.html`
-- `news/102/index.html`
-
-Share links in the app use these URLs, for example
-`https://simbayananfoundation.org/news/102/`. Each generated page contains the
-news title, description, and image preview, then redirects visitors to
-`index.html#/news/102`.
+If someone opens a new `/news/NEWS_ID/` URL before the generated file exists,
+`404.html` redirects them into the React article route. Social previews still
+need the generated page, so use the GitHub Action or local generator for the
+correct Facebook/Messenger thumbnail.
 
 ## Required Columns
 
