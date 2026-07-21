@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  checks: write
 
 jobs:
   build-firebase-public:
@@ -22,6 +23,14 @@ jobs:
 
       - name: Build Firebase public folder
         run: npm run build
+
+      - name: Deploy Firebase public folder
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SMCFI_BROADIMAGI }}
+          channelId: live
+          projectId: smcfi-broadimagi
 
       - name: Commit generated Firebase files
         run: |

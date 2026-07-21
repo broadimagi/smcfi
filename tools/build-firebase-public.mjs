@@ -52,6 +52,20 @@ const routes = [
 
 const projectPages = [
   {
+    path: "/projects/201/",
+    route: "projects/201",
+    title: `1st SMCFI Grand Alumni Homecoming and Sportfest | ${SITE_NAME}`,
+    description: "Once a scholar, always part of the mission",
+    image: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800",
+  },
+  {
+    path: "/projects/202/",
+    route: "projects/202",
+    title: `35th Anniversary Souvenir Program | ${SITE_NAME}`,
+    description: "A page of gratitude, a future of hope",
+    image: "https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcRofKIag6AcK1tzA3wVxiPDApGC1wVCOq4NEqNI3tOifyc2fDTzRjw2JxHG-fRUwiU5YNPIVnF5NZggpV0",
+  },
+  {
     path: "/projects/education-run/",
     route: "projects/education-run",
     title: `SMCFI 35th Education Run | ${SITE_NAME}`,
@@ -78,6 +92,20 @@ const projectPages = [
     title: `1st SMCFI Grand Alumni Homecoming | ${SITE_NAME}`,
     description: "Once a scholar, always part of the mission.",
     image: `${SITE_ORIGIN}/images/carousel/slep-community-group.jpg`,
+  },
+  {
+    path: "/projects/205/",
+    route: "projects/205",
+    title: `Movie Premiere Fundraising Event | ${SITE_NAME}`,
+    description: "One ticket. One cause. One step closer to a scholar's dream",
+    image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800",
+  },
+  {
+    path: "/projects/206/",
+    route: "projects/206",
+    title: `35th Anniversary: Education Run | ${SITE_NAME}`,
+    description: "Every stride is an act of love for a scholar's education",
+    image: "https://images.unsplash.com/photo-1502224562085-639556652f33?w=800",
   },
 ];
 
