@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "build": "node tools/build-firebase-public.mjs",
+    "serve": "firebase emulators:start --only hosting",
+    "deploy": "firebase deploy --only hosting"
+  }
+}

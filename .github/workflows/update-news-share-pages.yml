@@ -1,4 +1,4 @@
-name: Update news share pages
+name: Build Firebase public folder
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  update-news-share-pages:
+  build-firebase-public:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -20,18 +20,18 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Generate news share pages
-        run: node tools/generate-news-share-pages.mjs
+      - name: Build Firebase public folder
+        run: npm run build
 
-      - name: Commit generated pages
+      - name: Commit generated Firebase files
         run: |
           if [ -z "$(git status --porcelain)" ]; then
-            echo "No news share page changes."
+            echo "No Firebase public file changes."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add news
-          git commit -m "Update generated news share pages"
+          git add public
+          git commit -m "Build Firebase public folder"
           git push
