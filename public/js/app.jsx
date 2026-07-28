@@ -373,7 +373,7 @@ function Header({ route, setRoute }) {
     <header className="site-header">
       <div className="header-inner">
         <a className="brand" href="/" onClick={(event) => { event.preventDefault(); go("home"); }}>
-          <img className="brand-logo" src="/images/smcfiLogo.png" alt="SMCFI logo" />
+          <img className="brand-logo" src="/images/SMCFI_Logo.png" alt="SMCFI logo" />
           <span>Simbayanan ni Maria Community Foundation, Inc.</span>
         </a>
         <button className="nav-toggle" type="button" onClick={() => setOpen(!open)} aria-label="Toggle navigation">☰</button>
