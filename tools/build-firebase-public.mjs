@@ -3,7 +3,7 @@ import path from "node:path";
 
 const SITE_ORIGIN = "https://simbayananfoundation.org";
 const SITE_NAME = "Simbayanan ni Maria Community Foundation, Inc.";
-const SITE_ICON = `${SITE_ORIGIN}/images/SMCFI_Logo.png`;
+const SITE_ICON = `${SITE_ORIGIN}/apple-touch-icon.png`;
 const DEFAULT_IMAGE = `${SITE_ORIGIN}/images/carousel/scholars-celebration-2019.jpg`;
 const PUBLIC_DIR = "public";
 const DEFAULT_SHEET_ID = "1kkdTXbozZH22kmIB0f6L-DD9W8jElHwd0qzVUcd7mu0";
@@ -313,9 +313,9 @@ function pageHtml({ title, description, image = DEFAULT_IMAGE, path: routePath =
 <title>${escapeHtml(title)}</title>
 <meta name="description" content="${escapeHtml(description)}">
 <link rel="canonical" href="${escapeHtml(canonical)}">
-<link rel="icon" type="image/png" href="/images/SMCFI_Logo.png">
-<link rel="shortcut icon" type="image/png" href="/images/SMCFI_Logo.png">
-<link rel="apple-touch-icon" href="/images/SMCFI_Logo.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta property="og:type" content="${type}">
 <meta property="og:site_name" content="${escapeHtml(SITE_NAME)}">
 <meta property="og:title" content="${escapeHtml(title)}">
@@ -381,6 +381,9 @@ async function main() {
   await mkdir(path.join(PUBLIC_DIR, "js"), { recursive: true });
 
   await cp("images", path.join(PUBLIC_DIR, "images"), { recursive: true });
+  await cp("images/favicon.ico", path.join(PUBLIC_DIR, "favicon.ico"));
+  await cp("images/favicon-32x32.png", path.join(PUBLIC_DIR, "favicon-32x32.png"));
+  await cp("images/apple-touch-icon.png", path.join(PUBLIC_DIR, "apple-touch-icon.png"));
   await cp("css/app.css", path.join(PUBLIC_DIR, "css", "app.css"));
   await cp("js/app.jsx", path.join(PUBLIC_DIR, "js", "app.jsx"));
   await cp("js/content-config.js", path.join(PUBLIC_DIR, "js", "content-config.js"));
