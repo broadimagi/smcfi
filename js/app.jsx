@@ -53,9 +53,9 @@ const fallbackProjects = [
   {
     ID: "scholarship-program",
     status: "Active",
-    Header: "Scholarship Program",
+    Header: "Program",
     Subheader: "Holistic support for poor but deserving youth.",
-    Body: "The program provides academic support, values formation, mentoring, and leadership engagement.",
+    Body: "Program that help scholars grow academically, socially and spiritually as future leaders.",
     CardThumbnail: "/images/carousel/scholars-christmas-gathering.jpg",
     Button1Text: "Contact Us",
     Button1Link: "/contact",
@@ -447,7 +447,7 @@ function Scholarship() {
       <Hero title="Scholarship & Formation" subtitle="Developing scholars through education, servant leadership, academic excellence, and community engagement." />
       <section className="section">
         <div className="section-inner card-grid">
-          {["Scholarship Program", "Leadership Development", "Community Engagement", "Alumni Engagement"].map((title) => (
+          {["Program", "Leadership Development", "Community Engagement", "Alumni Engagement", "Values Formation", "Academic Excellence", "Services/Components"].map((title) => (
             <div className="card" key={title}>
               <h3>{title}</h3>
               <p>Programs that help scholars grow academically, socially, and spiritually as future leaders.</p>
@@ -611,10 +611,19 @@ function About() {
     "Network with local and international institutions for socio-economic projects.",
     "Strengthen values formation, leadership engagement, academic excellence, community building, and cooperativism.",
   ];
-  const timeline = ["1989 - Educational and livelihood assistance began.", "1991 - SMCFI was established as a non-stock, non-profit organization.", "2005 - Transitioned into a dedicated community foundation.", "2017 - Received PCNC accreditation.", "2022 - Renewed DSWD Level 2 accreditation through 2027.", "2026 - Celebrates 35 years of service in Taguig."];
+  const timeline = ["1989 - Started as one of the ministries that provided educational and livelihood assistance to the parishioners of Our Lady of the Holy Rosary Parish where Rev. Fr. Anton CT Pascual was the Parish Priest at that time", 
+    "1991 - SMCFI officially registered with the SEC as a non-stock, non-profit organization.", 
+    "1996 - Accredited by the Association of Foundations the largest network of NGOs in the Philippines.",
+    "2005 - Officially registered and licensed to operate with the DSWD as Social Development Agency in Taguig City.", 
+    "2008 - Officially registered and licensed to operate with the DSWD and categorized as Community-based Foundation in Taguig City.",
+    "2013 - Accredited as Civil Society Organization by the Sangguniang Panglungsod of the Taguig City Government",
+    "2017 - Accredited by the Philippine Council for NGO Certification.", 
+    "2019 - Simbayanan ni Maria Scholarship Program was accredited with the DSWD.", 
+    "2022 - Renewed DSWD Level 2 accreditation through 2027.", 
+    "2026 - Celebrates 35 years of service in Taguig."];
   return (
     <>
-      <Hero title="About Us" subtitle="A community development foundation in Taguig City forming poor youth as servants and future leaders." />
+      <Hero title="About Us" subtitle="A community development foundation in Tagu ig City forming poor youth as servants and future leaders." />
       <section className="section">
         <div className="section-inner about-layout">
           <div className="panel card">
@@ -627,8 +636,10 @@ function About() {
           </div>
           <div className="panel card">
             <h2>Certifications</h2>
-            <p><strong>DSWD Level 2</strong><br />Accredited as a community-based social welfare agency until 2027.</p>
-            <p><strong>PCNC Member</strong><br />Certified by the Philippine Council for NGO Certification.</p>
+            <p><strong>SEC Registered</strong><br />Duly registered with the SEC as a non-stock, non-profit organization. Certificate No.: 188391</p>
+            <p><strong>DSWD Registered and Licensed to Operate</strong><br />Renewed registration with the DSWD as a community based agency (3-year). Certificate No.: DSWD-SB-RL-2025-000039</p>
+            <p><strong>DSWD Level 2</strong><br />Renewed accreditation with the DSWD (5-year). Certificate No.: DSWD-SB-A-00005-2023</p>
+            <p><strong>PCNC Accredited</strong><br />Renewed accreditation with the Philippine Council for NGO Certification. Certificate No.: 2022-072773.</p>
             <p><strong>BIR Donee Status</strong><br />Registered Donee Institution for donor tax exemption.</p>
           </div>
         </div>
@@ -650,7 +661,7 @@ function About() {
 }
 
 function Contact() {
-  return (
+  return 
     <>
       <Hero title="Contact Us" subtitle="Reach out for inquiries, partnerships, scholarship support, and donations." />
       <section className="section">
@@ -666,14 +677,13 @@ function Contact() {
           <div className="panel card">
             <h2>Contact Information</h2>
             <p><strong>Email</strong><br />simbayananfoundation@gmail.com</p>
-            <p><strong>Phone</strong><br />+63 900 000 0000</p>
-            <p><strong>Location</strong><br />Taguig City, Philippines</p>
-            <p><strong>Office Hours</strong><br />Monday - Friday<br />9:00 AM - 5:00 PM</p>
+            <p><strong>Phone</strong><br />(632) 8838 6665 Local 818</p>
+            <p><strong>Location</strong><br />2/F SMMPC Building, 115 MLQ Street, Purok 2, New Lower Bicutan, Taguig City, Philippines</p>
+            <p><strong>Office Hours</strong><br />Monday - Friday<br />9:00 AM - 6:00 PM</p>
           </div>
         </div>
       </section>
     </>
-  );
 }
 
 function OpeningModal({ rows }) {
@@ -741,7 +751,7 @@ function App() {
 
   const page = useMemo(() => {
     if (route.page === "scholarship") return <Scholarship />;
-    if (route.page === "projects") return <><Hero title="Projects" subtitle="Programs, campaigns, and initiatives supporting youth transformation." /><ContentHub type="projects" rows={projects} id={route.id} /></>;
+    if (route.page === "projects") return <><Hero title="Projects" subtitle="Activities, campaigns, and initiatives of the foundation." /><ContentHub type="projects" rows={projects} id={route.id} /></>;
     if (route.page === "news") return <><Hero title="News & Updates" subtitle="Stories, announcements, and community updates from SMCFI." /><ContentHub type="news" rows={news} id={route.id} /></>;
     if (route.page === "contact") return <Contact />;
     if (route.page === "about") return <About />;
